@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio de Presentaciones</title>
+  <style>
+    body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #58a6ff;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      border: 1px solid #30363d;
+      background-color: #161b22;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .card h2 {
+      color: #58a6ff;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #8b949e;
+      margin-bottom: 20px;
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 16px;
+      background-color: #238636;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      border: 1px solid #2ea043;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #2ea043;
+    }
+
+    .btn-secondary {
+      background-color: #1f6feb;
+      border-color: #388bfd;
+    }
+
+    .btn-secondary:hover {
+      background-color: #388bfd;
+    }
+
+    .no-pdf {
+      color: #8b949e;
+      font-style: italic;
+    }
+
+    .toggle-btn {
+      background-color: #1f6feb;
+      border-color: #388bfd;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .pdf-controls {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Mi Portfolio de Presentaciones</h1>
+
+<!-- TP 1 -->
+<div class="card">
+  <h2>1. Sistemas, roles y metodologías de desarrollo</h2>
+  <p>TP 1: conceptos de sistemas, roles y metodologías.</p>
+  <div class="pdf-controls">
+    <button class="btn toggle-btn" onclick="togglePDF(1)">Ver PDF</button>
+  </div>
+  <div id="pdf-container-1" style="display: none;">
+    <p class="no-pdf">📄 PDF no disponible. Por favor, sube el archivo: sistemas-roles-metodologias-1.pdf</p>
+  </div>
+</div>
+
+<!-- TP 2 -->
+<div class="card">
+  <h2>2. Integración de las tecnologías en sistemas</h2>
+  <p>TP 2: uso y arquitectura de tecnologías en sistemas.</p>
+  <div class="pdf-controls">
+    <button class="btn toggle-btn" onclick="togglePDF(2)">Ver PDF</button>
+  </div>
+  <div id="pdf-container-2" style="display: none;">
+    <iframe class="pdf-viewer" src="https://github.com/dynamicrl2026-ui/portfolio-presentaciones/raw/main/presentacion-tecnologia_2.pdf"></iframe>
+    <div class="btn-group">
+      <a href="https://github.com/dynamicrl2026-ui/portfolio-presentaciones/raw/main/presentacion-tecnologia_2.pdf" class="btn btn-secondary" target="_blank">Descargar PDF</a>
+    </div>
+  </div>
+</div>
+
+<!-- TP 3 -->
+<div class="card">
+  <h2>3. Roles de analista de sistemas</h2>
+  <p>TP 3: funciones y responsabilidades del analista.</p>
+  <div class="pdf-controls">
+    <button class="btn toggle-btn" onclick="togglePDF(3)">Ver PDF</button>
+  </div>
+  <div id="pdf-container-3" style="display: none;">
+    <iframe class="pdf-viewer" src="https://github.com/dynamicrl2026-ui/portfolio-presentaciones/raw/main/roles-analista_3.pdf"></iframe>
+    <div class="btn-group">
+      <a href="https://github.com/dynamicrl2026-ui/portfolio-presentaciones/raw/main/roles-analista_3.pdf" class="btn btn-secondary" target="_blank">Descargar PDF</a>
+    </div>
+  </div>
+</div>
+
+<!-- TP 4 -->
+<div class="card">
+  <h2>4. El ciclo de vida del desarrollo de sistemas</h2>
+  <p>TP 4: fases del desarrollo de software y sistemas.</p>
+  <div class="pdf-controls">
+    <button class="btn toggle-btn" onclick="togglePDF(4)">Ver PDF</button>
+  </div>
+  <div id="pdf-container-4" style="display: none;">
+    <iframe class="pdf-viewer" src="https://github.com/dynamicrl2026-ui/portfolio-presentaciones/raw/main/sdlc-4.pdf"></iframe>
+    <div class="btn-group">
+      <a href="https://github.com/dynamicrl2026-ui/portfolio-presentaciones/raw/main/sdlc-4.pdf" class="btn btn-secondary" target="_blank">Descargar PDF</a>
+    </div>
+  </div>
+</div>
+
+<!-- TP 5 -->
+<div class="card">
+  <h2>5. La metodología ágil</h2>
+  <p>TP 5: principios y prácticas de trabajo ágil.</p>
+  <div class="pdf-controls">
+    <button class="btn toggle-btn" onclick="togglePDF(5)">Ver PDF</button>
+  </div>
+  <div id="pdf-container-5" style="display: none;">
+    <iframe class="pdf-viewer" src="https://github.com/dynamicrl2026-ui/portfolio-presentaciones/raw/main/agil-5.pdf"></iframe>
+    <div class="btn-group">
+      <a href="https://github.com/dynamicrl2026-ui/portfolio-presentaciones/raw/main/agil-5.pdf" class="btn btn-secondary" target="_blank">Descargar PDF</a>
+    </div>
+  </div>
+</div>
+
+<!-- TP 6 -->
+<div class="card">
+  <h2>6. Análisis y diseño de sistemas orientado a objetos</h2>
+  <p>TP 6: modelado y diseño con orientación a objetos.</p>
+  <div class="pdf-controls">
+    <button class="btn toggle-btn" onclick="togglePDF(6)">Ver PDF</button>
+  </div>
+  <div id="pdf-container-6" style="display: none;">
+    <p class="no-pdf">📄 PDF no disponible. Por favor, sube el archivo: analisis-diseno-sistemas-6.pdf</p>
+  </div>
+</div>
+
+<!-- TP 7 -->
+<div class="card">
+  <h2>7. Descripción gráfica de los sistemas</h2>
+  <p>TP 7: diagramas y esquemas para describir sistemas.</p>
+  <div class="pdf-controls">
+    <button class="btn toggle-btn" onclick="togglePDF(7)">Ver PDF</button>
+  </div>
+  <div id="pdf-container-7" style="display: none;">
+    <p class="no-pdf">📄 PDF no disponible. Por favor, sube el archivo: descripcion-grafica-sistemas-7.pdf</p>
+  </div>
+</div>
+
+<!-- TP 8 -->
+<div class="card">
+  <h2>8. Desarrollo del alcance del sistema</h2>
+  <p>TP 8: definición y documentación del alcance.</p>
+  <div class="pdf-controls">
+    <button class="btn toggle-btn" onclick="togglePDF(8)">Ver PDF</button>
+  </div>
+  <div id="pdf-container-8" style="display: none;">
+    <p class="no-pdf">📄 PDF no disponible. Por favor, sube el archivo: desarrollo-alcance-sistema-8.pdf</p>
+  </div>
+</div>
+
+<!-- TP 9 -->
+<div class="card">
+  <h2>9. Niveles de administración</h2>
+  <p>TP 9: gestión, dirección y administración en TI.</p>
+  <div class="pdf-controls">
+    <button class="btn toggle-btn" onclick="togglePDF(9)">Ver PDF</button>
+  </div>
+  <div id="pdf-container-9" style="display: none;">
+    <p class="no-pdf">📄 PDF no disponible. Por favor, sube el archivo: niveles-administracion-9.pdf</p>
+  </div>
+</div>
+
+<!-- TP 10 -->
+<div class="card">
+  <h2>10. Iniciación del proyecto</h2>
+  <p>TP 10: etapas iniciales y puesta en marcha del proyecto.</p>
+  <div class="pdf-controls">
+    <button class="btn toggle-btn" onclick="togglePDF(10)">Ver PDF</button>
+  </div>
+  <div id="pdf-container-10" style="display: none;">
+    <p class="no-pdf">📄 PDF no disponible. Por favor, sube el archivo: iniciacion-proyecto-10.pdf</p>
+  </div>
+</div>
+
+<script>
+  function togglePDF(tp) {
+    const container = document.getElementById(`pdf-container-${tp}`);
+    if (container.style.display === 'none') {
+      container.style.display = 'block';
+    } else {
+      container.style.display = 'none';
+    }
+  }
+</script>
+
+</body>
+</html>
