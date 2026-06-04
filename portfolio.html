@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio de Presentaciones</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #18181f;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.15);
+      --accent: #6c5ce7;
+      --accent2: #a29bfe;
+      --text: #f0eeff;
+      --muted: #7c7a8e;
+      --green: #00cec9;
+      --green-dim: rgba(0,206,201,0.12);
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+    .header { padding: 60px 40px 32px; max-width: 900px; margin: 0 auto; }
+    .header-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent2); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .header-tag::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--accent2); }
+    h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 10px; }
+    h1 span { color: var(--accent2); }
+    .header-sub { font-size: 15px; color: var(--muted); font-weight: 300; font-style: italic; }
+
+    .stats-bar { max-width: 900px; margin: 0 auto 40px; padding: 0 40px; display: flex; gap: 32px; }
+    .stat { display: flex; flex-direction: column; gap: 2px; }
+    .stat-num { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--accent2); }
+    .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    .grid { max-width: 900px; margin: 0 auto; padding: 0 40px 80px; display: flex; flex-direction: column; gap: 10px; }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s; }
+    .card:hover { border-color: var(--border-hover); }
+
+    .card-header { display: flex; align-items: center; gap: 16px; padding: 18px 22px; cursor: pointer; user-select: none; }
+    .card-num { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--accent); background: rgba(108,92,231,0.12); border: 1px solid rgba(108,92,231,0.25); border-radius: 6px; padding: 4px 9px; flex-shrink: 0; min-width: 44px; text-align: center; }
+    .card-info { flex: 1; min-width: 0; }
+    .card-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-desc { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .card-status { flex-shrink: 0; display: flex; align-items: center; gap: 10px; }
+
+    .badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
+    .badge-ok { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,206,201,0.25); }
+    .badge-pending { background: rgba(255,255,255,0.04); color: var(--muted); border: 1px solid var(--border); }
+
+    .chevron { width: 16px; height: 16px; color: var(--muted); transition: transform 0.25s; flex-shrink: 0; }
+    .card.open .chevron { transform: rotate(180deg); }
+
+    .card-body { display: none; border-top: 1px solid var(--border); }
+    .card.open .card-body { display: block; }
+
+    /* Drop zone */
+    .drop-zone { margin: 18px 22px; border: 1.5px dashed rgba(108,92,231,0.35); border-radius: 10px; padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: rgba(108,92,231,0.03); position: relative; }
+    .drop-zone:hover, .drop-zone.drag-over { border-color: var(--accent); background: rgba(108,92,231,0.08); }
+    .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .drop-icon { font-size: 26px; margin-bottom: 8px; display: block; }
+    .drop-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .drop-text strong { color: var(--accent2); font-weight: 500; }
+    .drop-hint { font-size: 11px; color: rgba(124,122,142,0.5); margin-top: 4px; }
+
+    /* PDF viewer */
+    .pdf-wrap { margin: 0 22px 20px; }
+    .pdf-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 8px; }
+    .pdf-name { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; overflow: hidden; }
+    .pdf-name .ok-dot { color: var(--green); flex-shrink: 0; }
+    .pdf-name em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pdf-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+    .btn-sm { background: none; border: 1px solid rgba(255,255,255,0.08); color: var(--muted); font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+    .btn-sm:hover { border-color: rgba(162,155,254,0.4); color: var(--accent2); }
+    .btn-sm.danger:hover { border-color: rgba(255,80,80,0.4); color: #ff6b6b; }
+
+    /* Pagination */
+    .pdf-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 10px; }
+    .pdf-nav button { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 6px 16px; border-radius: 7px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; transition: all 0.15s; }
+    .pdf-nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent2); }
+    .pdf-nav button:disabled { opacity: 0.3; cursor: default; }
+    .pdf-page-info { font-size: 12px; color: var(--muted); min-width: 80px; text-align: center; }
+
+    .canvas-wrap { background: #fff; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; border: 1px solid var(--border); }
+    .canvas-wrap canvas { display: block; max-width: 100%; }
+
+    .loading-msg { padding: 40px; text-align: center; color: var(--muted); font-size: 13px; }
+
+    @media (max-width: 600px) {
+      .header { padding: 36px 18px 24px; }
+      .stats-bar { padding: 0 18px; gap: 20px; }
+      .grid { padding: 0 18px 60px; }
+      .card-header { padding: 14px 16px; }
+      .drop-zone, .pdf-wrap { margin-left: 16px; margin-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">Analista de Sistemas</div>
+  <h1>Portfolio de <span>Presentaciones</span></h1>
+  <p class="header-sub">Trabajos prácticos — subí tus PDFs directamente desde el navegador</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><span class="stat-num" id="total-count">10</span><span class="stat-label">Trabajos</span></div>
+  <div class="stat"><span class="stat-num" id="loaded-count">0</span><span class="stat-label">Con PDF</span></div>
+  <div class="stat"><span class="stat-num" id="pending-count">10</span><span class="stat-label">Pendientes</span></div>
+</div>
+
+<div class="grid" id="cards-container"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const tps = [
+  { num:1,  title:"Sistemas, roles y metodologías de desarrollo",         desc:"Conceptos de sistemas, roles y metodologías",       pdfUrl:null,        pdfFile:"sistemas-roles-metodologias-1.pdf" },
+  { num:2,  title:"Integración de las tecnologías en sistemas",           desc:"Uso y arquitectura de tecnologías en sistemas",     pdfUrl:"https://raw.githubusercontent.com/dynamicrl2026-ui/portfolio-presentaciones/main/presentacion-tecnologia_2.pdf", pdfFile:"presentacion-tecnologia_2.pdf" },
+  { num:3,  title:"Roles de analista de sistemas",                        desc:"Funciones y responsabilidades del analista",        pdfUrl:"https://raw.githubusercontent.com/dynamicrl2026-ui/portfolio-presentaciones/main/roles-analista_3.pdf",            pdfFile:"roles-analista_3.pdf" },
+  { num:4,  title:"El ciclo de vida del desarrollo de sistemas",          desc:"Fases del desarrollo de software y sistemas",       pdfUrl:"https://raw.githubusercontent.com/dynamicrl2026-ui/portfolio-presentaciones/main/sdlc-4.pdf",                      pdfFile:"sdlc-4.pdf" },
+  { num:5,  title:"La metodología ágil",                                  desc:"Principios y prácticas de trabajo ágil",            pdfUrl:"https://raw.githubusercontent.com/dynamicrl2026-ui/portfolio-presentaciones/main/agil-5.pdf",                      pdfFile:"agil-5.pdf" },
+  { num:6,  title:"Análisis y diseño de sistemas orientado a objetos",    desc:"Modelado y diseño con orientación a objetos",       pdfUrl:null,        pdfFile:"analisis-diseno-sistemas-6.pdf" },
+  { num:7,  title:"Descripción gráfica de los sistemas",                  desc:"Diagramas y esquemas para describir sistemas",      pdfUrl:null,        pdfFile:"descripcion-grafica-sistemas-7.pdf" },
+  { num:8,  title:"Desarrollo del alcance del sistema",                   desc:"Definición y documentación del alcance",            pdfUrl:null,        pdfFile:"desarrollo-alcance-sistema-8.pdf" },
+  { num:9,  title:"Niveles de administración",                            desc:"Gestión, dirección y administración en TI",         pdfUrl:null,        pdfFile:"niveles-administracion-9.pdf" },
+  { num:10, title:"Iniciación del proyecto",                              desc:"Etapas iniciales y puesta en marcha del proyecto",  pdfUrl:null,        pdfFile:"iniciacion-proyecto-10.pdf" }
+];
+
+// State per card: { pdfDoc, currentPage, totalPages, blobUrl, fileName, isLocal }
+const state = {};
+
+function updateStats() {
+  const withPdf = Object.keys(state).filter(i => state[i] && state[i].pdfDoc).length;
+  document.getElementById('loaded-count').textContent = withPdf;
+  document.getElementById('pending-count').textContent = tps.length - withPdf;
+}
+
+function numStr(n) { return String(n).padStart(2,'0'); }
+
+// ── Render skeleton ─────────────────────────────────────────────
+function buildCard(tp, index) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = `card-${index}`;
+  card.innerHTML = `
+    <div class="card-header" onclick="toggleCard(${index})">
+      <div class="card-num">TP ${numStr(tp.num)}</div>
+      <div class="card-info">
+        <div class="card-title">${tp.title}</div>
+        <div class="card-desc">${tp.desc}</div>
+      </div>
+      <div class="card-status">
+        <span class="badge badge-pending" id="badge-${index}">Sin PDF</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+    <div class="card-body" id="body-${index}">
+      ${dropZoneHTML(index, tp)}
+    </div>`;
+  return card;
+}
+
+function dropZoneHTML(index, tp) {
+  return `
+    <div class="drop-zone" id="drop-${index}"
+      ondragover="handleDragOver(event,${index})"
+      ondragleave="handleDragLeave(event,${index})"
+      ondrop="handleDrop(event,${index})">
+      <input type="file" accept="application/pdf" onchange="handleFile(event,${index})">
+      <span class="drop-icon">📄</span>
+      <div class="drop-text"><strong>Arrastrá tu PDF aquí</strong> o hacé click para buscarlo</div>
+      <div class="drop-hint">Nombre sugerido: ${tp.pdfFile}</div>
+    </div>`;
+}
+
+function viewerHTML(index) {
+  const s = state[index];
+  return `
+    <div class="pdf-wrap" id="viewer-wrap-${index}">
+      <div class="pdf-toolbar">
+        <div class="pdf-name">
+          <span class="ok-dot">✓</span>
+          <em>${s.fileName}</em>
+        </div>
+        <div class="pdf-actions">
+          ${s.isLocal ? `<button class="btn-sm danger" onclick="removePdf(${index})">✕ Quitar</button>` : ''}
+          <button class="btn-sm" onclick="openReplaceZone(${index})">↑ Reemplazar</button>
+        </div>
+      </div>
+      <div class="canvas-wrap" id="canvas-wrap-${index}">
+        <div class="loading-msg">Cargando página…</div>
+      </div>
+      <div class="pdf-nav">
+        <button onclick="changePage(${index},-1)" id="prev-${index}">← Anterior</button>
+        <span class="pdf-page-info" id="page-info-${index}">1 / ${s.totalPages}</span>
+        <button onclick="changePage(${index},1)" id="next-${index}">Siguiente →</button>
+      </div>
+      <div id="replace-zone-${index}" style="display:none; margin-top:10px;">
+        ${dropZoneHTML(index, tps[index])}
+      </div>
+    </div>`;
+}
+
+// ── PDF rendering ────────────────────────────────────────────────
+async function renderPage(index) {
+  const s = state[index];
+  if (!s || !s.pdfDoc) return;
+  const wrap = document.getElementById(`canvas-wrap-${index}`);
+  if (!wrap) return;
+
+  wrap.innerHTML = '<div class="loading-msg">Renderizando…</div>';
+
+  const page = await s.pdfDoc.getPage(s.currentPage);
+  const containerWidth = wrap.parentElement.offsetWidth || 800;
+  const viewport = page.getViewport({ scale: 1 });
+  const scale = Math.min((containerWidth) / viewport.width, 2.2);
+  const scaled = page.getViewport({ scale });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = scaled.width;
+  canvas.height = scaled.height;
+  const ctx = canvas.getContext('2d');
+
+  wrap.innerHTML = '';
+  wrap.appendChild(canvas);
+
+  await page.render({ canvasContext: ctx, viewport: scaled }).promise;
+
+  document.getElementById(`page-info-${index}`).textContent = `${s.currentPage} / ${s.totalPages}`;
+  document.getElementById(`prev-${index}`).disabled = s.currentPage <= 1;
+  document.getElementById(`next-${index}`).disabled = s.currentPage >= s.totalPages;
+}
+
+function changePage(index, delta) {
+  const s = state[index];
+  const next = s.currentPage + delta;
+  if (next < 1 || next > s.totalPages) return;
+  s.currentPage = next;
+  renderPage(index);
+}
+
+// ── Load PDF (URL or Blob) ───────────────────────────────────────
+async function loadPdfFromUrl(url, index, fileName, isLocal) {
+  const body = document.getElementById(`body-${index}`);
+  body.innerHTML = `<div class="loading-msg">Cargando PDF…</div>`;
+
+  try {
+    const pdfDoc = await pdfjsLib.getDocument(url).promise;
+    state[index] = { pdfDoc, currentPage: 1, totalPages: pdfDoc.numPages, blobUrl: isLocal ? url : null, fileName, isLocal };
+
+    body.innerHTML = viewerHTML(index);
+    renderPage(index);
+
+    const badge = document.getElementById(`badge-${index}`);
+    badge.className = 'badge badge-ok';
+    badge.textContent = '✓ PDF listo';
+
+    updateStats();
+  } catch(e) {
+    body.innerHTML = `<div class="loading-msg" style="color:#ff6b6b;">No se pudo cargar el PDF. Subilo manualmente.<br><small>${e.message}</small></div>
+      <div style="padding:0 22px 18px;">${dropZoneHTML(index, tps[index])}</div>`;
+  }
+}
+
+function loadPdf(file, index) {
+  if (state[index] && state[index].blobUrl) URL.revokeObjectURL(state[index].blobUrl);
+  const blobUrl = URL.createObjectURL(file);
+  loadPdfFromUrl(blobUrl, index, file.name, true);
+}
+
+function removePdf(index) {
+  if (state[index] && state[index].blobUrl) URL.revokeObjectURL(state[index].blobUrl);
+  delete state[index];
+  const body = document.getElementById(`body-${index}`);
+  body.innerHTML = dropZoneHTML(index, tps[index]);
+  const badge = document.getElementById(`badge-${index}`);
+  badge.className = 'badge badge-pending';
+  badge.textContent = 'Sin PDF';
+  updateStats();
+}
+
+function openReplaceZone(index) {
+  const zone = document.getElementById(`replace-zone-${index}`);
+  if (zone) zone.style.display = zone.style.display === 'none' ? 'block' : 'none';
+}
+
+// ── Toggle card ──────────────────────────────────────────────────
+function toggleCard(index) {
+  document.getElementById(`card-${index}`).classList.toggle('open');
+}
+
+// ── Drag & drop ──────────────────────────────────────────────────
+function handleDragOver(e, index) {
+  e.preventDefault();
+  document.getElementById(`drop-${index}`)?.classList.add('drag-over');
+}
+function handleDragLeave(e, index) {
+  document.getElementById(`drop-${index}`)?.classList.remove('drag-over');
+}
+function handleDrop(e, index) {
+  e.preventDefault();
+  document.getElementById(`drop-${index}`)?.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type === 'application/pdf') { loadPdf(file, index); }
+  else alert('Por favor subí un archivo PDF.');
+}
+function handleFile(e, index) {
+  const file = e.target.files[0];
+  if (file) loadPdf(file, index);
+}
+
+// ── Init ─────────────────────────────────────────────────────────
+function init() {
+  const container = document.getElementById('cards-container');
+  tps.forEach((tp, i) => container.appendChild(buildCard(tp, i)));
+
+  // Auto-load GitHub PDFs
+  tps.forEach((tp, i) => {
+    if (tp.pdfUrl) {
+      document.getElementById(`card-${i}`).classList.add('open');
+      loadPdfFromUrl(tp.pdfUrl, i, tp.pdfFile, false);
+    }
+  });
+}
+
+init();
+</script>
+</body>
+</html>
